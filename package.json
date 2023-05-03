@@ -4,7 +4,8 @@
   "description": "Demo API ",
   "main": "app.js",
   "scripts": {
-    "test": "nodemon app.js"
+    "dev": "nodemon dist/app.js",
+    "start": "nodemon src/app.ts"
   },
   "author": "Oluwaseun",
   "license": "ISC",
@@ -12,5 +13,8 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "nodemon": "^2.0.22"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17"
   }
 }
