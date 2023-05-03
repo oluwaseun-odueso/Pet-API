@@ -16,10 +16,10 @@ router.post('/add', addPet);
 router.get('/get_pet/:id', getPet);
 
 // Get all pets
-router.get('/get_pet', getAllPets);
+router.get('/get_pets', getAllPets);
 
 // update a pet 
-router.patch('/:id', updatePet);
+router.put('/:id', updatePet);
 
 // Delete pet
 router.delete('/:id', deletePet)

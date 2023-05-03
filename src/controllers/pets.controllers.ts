@@ -9,24 +9,24 @@ import {
 
 export const addPet = async (req: Request, res: Response) => {
     try {
-        console.log(req.body)
-        const response = addItem(req.body)
-        res
-        .status(201)
-        .json({success: true, message: "New pet added"})
+        const pet = addItem(req.body)
+        res.status(201).json({success: true, message: "New pet added", pet})
     } catch (error: any) {
-        res
-        .status(500)
-        .json({success: false, message: `Error adding new pet ${error.message}`})
+        return res.status(500).json({success: false, message: `Error adding new pet ${error.message}`})
     }
 }
 
 export const getPet = async(req: Request, res: Response) => {
     try {
         const pet = getItem(parseInt(req.params.id));
-        res
-        .status(200)
-        .json({success: true, pet})
+        if (!pet) {
+            res.status(400).send({
+                success: false,
+                message: "Pet does not exist"
+            });
+            return;
+        };
+        res.status(200).json({success: true, pet})
     } catch (error: any) {
         res
         .status(500)
@@ -37,9 +37,14 @@ export const getPet = async(req: Request, res: Response) => {
 export const getAllPets = async(req: Request, res: Response) => {
     try {
         const pets = listItems();
-        res
-        .status(200)
-        .json({success: true, pets})
+        if (!pets) {
+            res.status(400).send({
+                success: false,
+                message: "No pets in database"
+            });
+            return;
+        };
+        res.status(200).json({success: true, pets})
     } catch (error: any) {
         res
         .status(500)
@@ -52,9 +57,9 @@ export const updatePet = async(req: Request, res: Response) => {
         const pet = updateItem(parseInt(req.params.id), req.body)
         res
         .status(200)
-        .json({success: true, message: "Pet details successfully updated"})
+        .json({success: true, message: "Pet details successfully updated", pet})
     } catch (error: any) {
-        res
+        return res
         .status(500)
         .json({success: false, message: `Error updating pet details ${error.message}`})
     }
@@ -63,9 +68,7 @@ export const updatePet = async(req: Request, res: Response) => {
 export const deletePet = async(req: Request, res: Response) => {
     try {
         const pet = deleteItem(parseInt(req.params.id))
-        res
-        .status(200)
-        .json({success: true, message: "Pet details successfully deleted"})
+        res.status(200).json({success: true, message: "Pet details successfully deleted"})
     } catch (error: any) {
         res
         .status(500)

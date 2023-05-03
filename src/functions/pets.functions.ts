@@ -3,16 +3,15 @@ import db from '../database/database';
 export const getItem = (id: number) => {
     try {
         if (!db || !db.pets) {
-            throw new Error("Database or pets array does not exist.")
+            return("Database or pets array does not exist.")
         }
         const pet = db.pets.filter(pet => pet?.id === id)[0]
         if (!pet) {
-            throw new Error("Pet with given ID does not exist.")
+            return("Pet with given ID does not exist.")
         }
         return pet
     } catch (error: any) {
-        console.log("An error occurred, ", error.message)
-        return null;
+        throw new Error(`An error occurred, ${error.message}`)
     }
 };
 
@@ -24,45 +23,42 @@ export const addItem = (data: {
 }) => {
     try {
         if (!db || !db.pets) {
-            throw new Error("Database or pets array does not exist.")
+            return("Database or pets array does not exist.")
         }
         const newPet = { id: db.pets.length + 1, ...data }
-        console.log(newPet)
         db.pets.push(newPet)
         return newPet
     } catch (error: any) {
-        console.log("An error occurred, ", error.message)
-        return null;
+        throw new Error(`An error occurred, ${error.message}`)
     }
 };
 
 export const listItems = () => {
     try {
         if (!db || !db.pets) {
-            throw new Error("Database or pets array does not exist.")
+            return("Database or pets array does not exist.")
         }
-        return db.pets[0]
+        return db.pets
     } catch (error: any) {
-        console.log("An error occurred, ", error.message)
-        return null;
+        throw new Error(`An error occurred, ${error.message}`)
     }
 };
 
 export const deleteItem = (id: number) => {
     try {
         if (!db || !db.pets) {
-            throw new Error("Database or pets array does not exist.")
+            return("Database or pets array does not exist.")
         }
         const index = db.pets.findIndex(pet => pet.id === id)
         if (index === -1) {
-            throw new Error('Pet not found')
+            return('Pet not found')
         } else {
             db.pets.splice(index, 1)
+            console.log(db.pets)
             return db.pets
         }
     } catch (error: any) {
-        console.log("An error occurred, ", error.message)
-        return null;
+        throw new Error(`An error occurred, ${error.message}`)
     }
 };
 
@@ -75,14 +71,14 @@ export const updateItem = (id: number, data: {
     try {
         const index = db.pets.findIndex(pet => pet.id === id)
         if (index === -1) {
-            throw new Error('Pet not found')
+            return('Pet not found')
         } else {
             const dataWithId = { id: index, ...data }
             db.pets[index] = dataWithId
+            console.log(db.pets)
             return db.pets[index]
         }
     } catch (error: any) {
-        console.log("An error occurred, ", error.message)
-        return null;
+        throw new Error(`An error occurred, ${error.message}`)
     }
 }
