@@ -1,13 +1,16 @@
 import {Request, Response} from "express";
 import {
-    addNewPet,
-    getAPet,
-    getPets
+    addItem,
+    getItem,
+    listItems,
+    updateItem,
+    deleteItem
 } from '../functions/pets.functions'
 
 export const addPet = async (req: Request, res: Response) => {
     try {
-        const response = addNewPet(req.body)
+        console.log(req.body)
+        const response = addItem(req.body)
         res
         .status(201)
         .json({success: true, message: "New pet added"})
@@ -20,7 +23,7 @@ export const addPet = async (req: Request, res: Response) => {
 
 export const getPet = async(req: Request, res: Response) => {
     try {
-        const pet = getAPet(parseInt(req.params.id));
+        const pet = getItem(parseInt(req.params.id));
         res
         .status(200)
         .json({success: true, pet})
@@ -33,7 +36,7 @@ export const getPet = async(req: Request, res: Response) => {
 
 export const getAllPets = async(req: Request, res: Response) => {
     try {
-        const pets = getPets();
+        const pets = listItems();
         res
         .status(200)
         .json({success: true, pets})
@@ -46,7 +49,7 @@ export const getAllPets = async(req: Request, res: Response) => {
 
 export const updatePet = async(req: Request, res: Response) => {
     try {
-        const pet = updateAPet(parseInt(req.params.id))
+        const pet = updateItem(parseInt(req.params.id), req.body)
         res
         .status(200)
         .json({success: true, message: "Pet details successfully updated"})
@@ -54,5 +57,18 @@ export const updatePet = async(req: Request, res: Response) => {
         res
         .status(500)
         .json({success: false, message: `Error updating pet details ${error.message}`})
+    }
+};
+
+export const deletePet = async(req: Request, res: Response) => {
+    try {
+        const pet = deleteItem(parseInt(req.params.id))
+        res
+        .status(200)
+        .json({success: true, message: "Pet details successfully deleted"})
+    } catch (error: any) {
+        res
+        .status(500)
+        .json({success: false, message: `Error deleting pet details ${error.message}`})
     }
 };
