@@ -1,10 +1,10 @@
 // import db from '../database/database';
 import {writeFile, readFile} from 'fs'
 
-async function writeData(filename: string, obj: any): Promise<void> {
+async function writeData(filename: string, data: any): Promise<void> {
     try {
-      const newObj = JSON.stringify(obj);
-      await writeFileAsync(filename, newObj);
+      const newData = JSON.stringify(data);
+      await writeFileAsync(filename, newData);
     } catch (error) {
       throw error;
     }
@@ -17,8 +17,7 @@ function writeFileAsync(filename: string, data: string): Promise<void> {
         else resolve();
         });
     });
-}
-
+};
 
 async function readData(filename: string): Promise<[{
     id: number;
@@ -45,9 +44,34 @@ function readFileAsync(filename: string): Promise<string> {
     });
   }
 
+export async function addItem (data: {
+    name: string;
+    type: string;
+    age: number;
+    breed: string;
+}) {
+    try {
+        const db = await readData('./src/pets.txt')
+        if (!db) {
+            const arrayObj: {}[] = []
+            arrayObj.push({ id: 1, ...data })
+            console.log(arrayObj)
+            await writeData('./src/pets.txt', arrayObj)
+            return arrayObj;
+        } else {
+            // const newPet = { id: db.length + 1, ...data }
+            db.push({ id: db.length + 1, ...data })
+            await writeData('./src/pets.txt', db)
+            return db;
+        }
+    } catch (error: any) {
+        throw new Error(`An error occurred, ${error.message}`)
+    }
+};
+
 export async function getItem (id: number) {
     try {
-        const db = await readData('./pets.txt')
+        const db = await readData('./src/pets.txt')
         if (!db) {
             return("Database or pets array does not exist.")
         }
@@ -61,29 +85,9 @@ export async function getItem (id: number) {
     }
 };
 
-export async function addItem (data: {
-    name: string;
-    type: string;
-    age: number;
-    breed: string;
-}) {
-    try {
-        const db = await readData('./pets.txt')
-        if (!db) {
-            return("Database or pets array does not exist.")
-        }
-        const newPet = { id: db.length + 1, ...data }
-        db.push(newPet)
-        await writeData('./pets.txt', newPet)
-        return newPet
-    } catch (error: any) {
-        throw new Error(`An error occurred, ${error.message}`)
-    }
-};
-
 export async function listItems () {
     try {
-        const db = await readData('./pets.txt')
+        const db = await readData('./src/pets.txt')
         if (!db) {
             return("Database or pets array does not exist.")
         }
@@ -95,7 +99,7 @@ export async function listItems () {
 
 export async function deleteItem (id: number) {
     try {
-        const db = await readData('./pets.txt')
+        const db = await readData('./src/pets.txt')
         if (!db) {
             return("Database or pets array does not exist.")
         }
@@ -104,7 +108,7 @@ export async function deleteItem (id: number) {
             return('Pet not found')
         } else {
             db.splice(index, 1)
-            await writeData('./pets.text', db)
+            await writeData('./src/pets.text', db)
             console.log(db)
             return db
         }
@@ -120,7 +124,7 @@ export async function updateItem (id: number, data: {
     breed: string;
 }) {
     try {
-        const db = await readData('./pets.txt')
+        const db = await readData('./src/pets.txt')
         const index = db.findIndex(pet => pet.id === id)
         if (index === -1) {
             return('Pet not found')
