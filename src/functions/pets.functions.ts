@@ -218,11 +218,11 @@ export async function getItem(id: number): Promise<PetInterface | string> {
     try {
         const db = await readData('./src/pets.txt');
         if (db === null || db === undefined) {
-            return("Database or pets array does not exist.");
+            throw new Error("Database or pets array does not exist.");
         }
         const pet = db.filter(pet => pet?.id === id)[0];
         if (!pet) {
-            return("Pet with given ID does not exist.");
+            throw new Error("Pet with given ID does not exist.");
         }
         return pet;
     } catch (error: any) {
@@ -234,7 +234,7 @@ export async function listItems(): Promise<PetInterface[] | string> {
     try {
         const db = await readData('./src/pets.txt');
         if (db === null || db === undefined) {
-            return("Database or pets array does not exist.");
+            throw new Error("Database or pets array does not exist.");
         }
         return db;
     } catch (error: any) {
@@ -246,15 +246,14 @@ export async function deleteItem(id: number): Promise<PetInterface[] | string> {
     try {
         const db = await readData('./src/pets.txt');
         if (db === null || db === undefined) {
-            return("Database or pets array does not exist.");
+            throw new Error("Database or pets array does not exist.");
         }
         const index = db.findIndex(pet => pet.id === id);
         if (index === -1) {
-            return('Pet not found')
+            throw new Error('Pet not found')
         } else {
             db.splice(index, 1)
             await writeData('./src/pets.text', db)
-            console.log(db)
             return db
         }
     } catch (error: any) {
@@ -266,16 +265,15 @@ export async function updateItem (id: number, data: PetInterface): Promise<PetIn
     try {
         const db = await readData('./src/pets.txt');
         if (db === null || db === undefined) {
-            return("Database or pets array does not exist.");
+            throw new Error("Database or pets array does not exist.");
         }
         const index = db.findIndex(pet => pet.id === id)
         if (index === -1) {
-            return('Pet not found')
+            throw new Error('Pet not found')
         } else {
             const dataWithId = { id: index, ...data }
             db[index] = dataWithId
             await writeData('./pets.text', db)
-            console.log(db)
             return db
         }
     } catch (error: any) {

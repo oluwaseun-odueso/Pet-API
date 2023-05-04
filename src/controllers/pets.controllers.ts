@@ -9,7 +9,8 @@ import {
 
 export const addPet = async (req: Request, res: Response) => {
     try {
-        const pet = addItem(req.body)
+        const pet = await addItem(req.body)
+        console.log(pet)
         res.status(201).json({success: true, message: "New pet added", pet})
     } catch (error: any) {
         return res.status(500).json({success: false, message: `Error adding new pet ${error.message}`})
@@ -18,7 +19,7 @@ export const addPet = async (req: Request, res: Response) => {
 
 export const getPet = async(req: Request, res: Response) => {
     try {
-        const pet = getItem(parseInt(req.params.id));
+        const pet = await getItem(parseInt(req.params.id));
         if (!pet) {
             res.status(400).send({
                 success: false,
@@ -36,7 +37,7 @@ export const getPet = async(req: Request, res: Response) => {
 
 export const getAllPets = async(req: Request, res: Response) => {
     try {
-        const pets = listItems();
+        const pets = await listItems();
         if (!pets) {
             res.status(400).send({
                 success: false,
@@ -54,7 +55,7 @@ export const getAllPets = async(req: Request, res: Response) => {
 
 export const updatePet = async(req: Request, res: Response) => {
     try {
-        const pet = updateItem(parseInt(req.params.id), req.body)
+        const pet = await updateItem(parseInt(req.params.id), req.body)
         res
         .status(200)
         .json({success: true, message: "Pet details successfully updated", pet})
@@ -67,7 +68,7 @@ export const updatePet = async(req: Request, res: Response) => {
 
 export const deletePet = async(req: Request, res: Response) => {
     try {
-        const pet = deleteItem(parseInt(req.params.id))
+        const pet = await deleteItem(parseInt(req.params.id))
         res.status(200).json({success: true, message: "Pet details successfully deleted"})
     } catch (error: any) {
         res
