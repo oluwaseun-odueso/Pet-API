@@ -10,7 +10,6 @@ import {
 export const addPet = async (req: Request, res: Response) => {
     try {
         const pet = await addItem(req.body)
-        console.log(pet)
         res.status(201).json({success: true, message: "New pet added", pet})
     } catch (error: any) {
         return res.status(500).json({success: false, message: `Error adding new pet ${error.message}`})

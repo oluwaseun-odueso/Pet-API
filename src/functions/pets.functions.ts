@@ -83,7 +83,7 @@ export async function deleteItem(id: number): Promise<PetInterface[] | string> {
             throw new Error('Pet not found')
         } else {
             db.splice(index, 1)
-            await writeData('./src/pets.text', db)
+            await writeData('./src/pets.txt', db)
             return db
         }
     } catch (error: any) {
@@ -101,9 +101,9 @@ export async function updateItem (id: number, data: PetInterface): Promise<PetIn
         if (index === -1) {
             throw new Error('Pet not found')
         } else {
-            const dataWithId = { id: index, ...data }
+            const dataWithId = { id, ...data }
             db[index] = dataWithId
-            await writeData('./pets.text', db)
+            await writeData('./src/pets.txt', db)
             return db
         }
     } catch (error: any) {
